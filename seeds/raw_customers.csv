@@ -1,0 +1,6 @@
+customer_id,first_name,last_name,email,date_of_birth,first_order_date,customer_tier
+cust_1,John,Doe,john.doe@example.com,1985-03-15,2022-01-10,Gold
+cust_2,Jane,Smith,jane.smith@example.com,1990-07-22,2022-02-05,Silver
+cust_3,Bob,Johnson,bob.johnson@example.com,1978-11-30,2022-03-18,Bronze
+cust_4,Alice,Williams,alice.w@example.com,1995-05-10,NULL,NULL
+cust_5,Charlie,Brown,charlie.b@example.com,1982-09-25,2022-04-01,Gold

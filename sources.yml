@@ -1,0 +1,57 @@
+version: 2
+
+sources:
+  - name: git
+    description: "Raw data from GitHub/GitLab APIs"
+    database: "{{ var('git_source_database') }}"
+    schema: git_raw
+    loader: "fivetran"
+    tags: ["git", "staging"]
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 36, period: hour}
+    
+    tables:
+      - name: commits
+        description: "All version control commits with metadata"
+        identifier: git_commits
+        loaded_at_field: _loaded_at
+        columns:
+          - name: commit_id
+            description: "Unique SHA-1 hash identifying the commit"
+            tests:
+              - unique
+              - not_null
+          - name: author_id
+            description: "Developer who made the commit"
+          - name: is_merge_commit
+            description: "Boolean indicating if this is a merge commit"
+
+      - name: pull_requests
+        description: "Pull request metadata and lifecycle states"
+        loaded_at_field: _loaded_at
+        freshness:
+          warn_after: {count: 12, period: hour}
+        columns:
+          - name: pull_request_id
+            tests:
+              - unique
+              - not_null
+          - name: review_cycle_time
+            description: "Time from PR open to merge in hours"
+
+      - name: file_changes
+        description: "Line-by-line changes per commit"
+        loaded_at_field: _loaded_at
+        columns:
+          - name: file_path
+            tests:
+              - not_null
+          - name: lines_added
+            tests:
+              - dbt_expectations.expect_column_values_to_be_between:
+                  min_value: 0
+          - name: lines_deleted
+            tests:
+              - dbt_expectations.expect_column_values_to_be_between:
+                  min_value: 0

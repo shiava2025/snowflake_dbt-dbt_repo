@@ -1,0 +1,6 @@
+team_id,team_name,developer_id,developer_name,developer_email,start_date,is_active
+platform,Platform Engineering,dev_001,Alice Chen,alice@company.com,2022-01-15,true
+platform,Platform Engineering,dev_002,Bob Singh,bob@company.com,2021-11-03,true
+infra,Infrastructure,dev_003,Carol Wang,carol@company.com,2023-02-20,true
+security,Security,dev_004,David Kim,david@company.com,2020-05-10,true
+product,Product,dev_005,Eve Johnson,eve@company.com,2023-01-05,true

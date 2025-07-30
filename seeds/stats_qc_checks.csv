@@ -1,0 +1,5 @@
+T_CNTL_TYP,T_CNTL_GRP,T_DB,T_SCHEMA,T_TABLE_VIEW_NAME,T_DATE_FIELD,T_METRIC_COLUMN,T_GROUP_1,T_GROUP_2,T_GROUP_3,T_WHERE_CLAUSE,I_SAMPLE_SIZE,I_FAIL_ABOVE_TH,I_WARN_ABOVE_TH,I_FAIL_BELOW_TH,I_WARN_BELOW_TH,I_ID,ACTIVE_CHECK
+customer,spending,DBT,RAW_ANALYTICS,FCT_CUSTOMER_LIFETIME_VALUE,first_order_date,total_spent_usd,customer_tier,value_segment,frequency_segment,1=1,30,3,2,-3,-2,1,Y
+customer,orders,DBT,RAW_ANALYTICS,FCT_CUSTOMER_LIFETIME_VALUE,first_order_date,RECORD_COUNT,customer_tier,value_segment,N,1=1,30,3,2,-3,-2,2,Y
+customer,monthly_rate,DBT,RAW_ANALYTICS,FCT_CUSTOMER_LIFETIME_VALUE,first_order_date,monthly_spending_rate,customer_tier,tenure_segment,N,1=1,30,3,2,-3,-2,3,Y
+customer,projection,DBT,RAW_ANALYTICS,FCT_CUSTOMER_LIFETIME_VALUE,first_order_date,projected_annual_value,customer_tier,N,N,1=1,30,3,2,-3,-2,4,Y

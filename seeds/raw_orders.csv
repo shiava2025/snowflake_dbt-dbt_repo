@@ -1,0 +1,9 @@
+order_id,customer_id,order_date,status,amount,payment_method,country
+order_1,cust_1,2022-01-10,completed,100.50,credit_card,US
+order_2,cust_1,2022-02-15,completed,75.25,credit_card,US
+order_3,cust_2,2022-02-05,completed,150.00,paypal,UK
+order_4,cust_3,2022-03-18,returned,45.90,debit_card,CA
+order_5,cust_3,2022-04-20,completed,200.75,credit_card
+order_6,cust_5,2022-04-01,completed,300.00,credit_card,AU
+order_7,cust_5,2022-05-10,processing,50.00,paypal,AU
+order_8,cust_5,2022-05-15,completed,125.50,credit_card,AU

@@ -1,0 +1,9 @@
+payment_id,order_id,payment_date,amount,payment_method,payment_status,currency
+pay_1,order_1,2022-01-10,100.50,credit_card,successful,USD
+pay_2,order_2,2022-02-15,75.25,credit_card,successful,USD
+pay_3,order_3,2022-02-05,150.00,paypal,successful,GBP
+pay_4,order_4,2022-03-18,45.90,debit_card,refunded,CAD
+pay_5,order_5,2022-04-20,200.75,credit_card,successful,CAD
+pay_6,order_6,2022-04-01,300.00,credit_card,successful,AUD
+pay_7,order_7,2022-05-10,50.00,paypal,pending,AUD
+pay_8,order_8,2022-05-15,125.50,credit_card,successful,AUD

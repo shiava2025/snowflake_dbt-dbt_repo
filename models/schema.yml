@@ -1,0 +1,218 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw_raw
+    tables:
+      - name: raw_customers
+        loaded_at_field: _loaded_at
+        columns:
+          - name: customer_id
+            tests:
+              - not_null
+              - unique
+          - name: email
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_orders')
+                  field: customer_id
+                  severity: warn
+          - name: date_of_birth
+
+      - name: raw_orders
+        columns:
+          - name: order_id
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            tests:
+              - relationships:
+                  to: ref('stg_customers')
+                  field: customer_id
+          - name: amount
+            tests:
+              - not_null
+
+      - name: raw_payments
+        columns:
+          - name: payment_id
+            tests:
+              - not_null
+              - unique
+          - name: order_id
+            tests:
+              - relationships:
+                  to: ref('stg_orders')
+                  field: order_id
+
+models:
+  - name: stg_customers
+    description: "Staging model for customer data with basic transformations"
+    columns:
+      - name: customer_id
+        description: "Primary key for customers"
+        tests:
+          - not_null
+          - unique
+      - name: customer_age
+        description: "Age calculated from date of birth"
+        
+      - name: customer_tier
+        description: "Customer loyalty tier (Gold, Silver, Bronze)"
+        tests:
+          - accepted_values:
+              values: ['Gold', 'Silver', 'Bronze', None]
+
+  - name: stg_orders
+    description: "Staging model for order data with currency conversion"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: amount_usd
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['completed', 'processing', 'returned', 'cancelled']
+
+  - name: int_customer_orders
+    description: "Intermediate model aggregating customer order metrics"
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+      - name: total_spent_usd
+        tests:
+          - not_null
+      - name: months_since_first_order
+
+  - name: fct_customer_lifetime_value
+    description: "Fact table calculating customer lifetime value metrics"
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+      - name: projected_annual_value
+        tests:
+          - not_null
+      - name: value_segment
+        tests:
+          - accepted_values:
+              values: ['High Value', 'Medium Value', 'Low Value']    
+
+  - name: stats_qc_model
+    description: "Table that calculates z-scores and performs statistical QC checks using the statistical_qc macro"
+    columns:
+      - name: control_type
+        description: "identifies the type of control"
+        data_type: varchar
+        tests:
+          - not_null
+
+      - name: control_group
+        description: "identifies the group of control"
+        data_type: varchar
+        tests:
+          - not_null
+
+      - name: table_name
+        description: "name of the table being checked"
+        data_type: varchar
+        tests:
+          - not_null
+
+      - name: metric_column
+        description: "name of the metric column being checked"
+        data_type: varchar
+
+      - name: i_id
+        description: "unique identifier for the control check"
+        data_type: number(38,0)
+        tests:
+          - not_null
+          - unique
+
+      - name: qc_group1
+        description: "first group of quality control checks"
+        data_type: varchar
+
+      - name: qc_group2
+        description: "second group of quality control checks"
+        data_type: varchar
+
+      - name: qc_group3
+        description: "third group of quality control checks"
+        data_type: varchar
+
+      - name: metric_date
+        description: "date of the metric being checked"
+        data_type: date
+
+      - name: reporting_date
+        description: "date when the report was generated"
+        data_type: date
+
+      - name: current_value
+        description: "current value of the metric being checked"
+        data_type: number(38,2)
+
+      - name: historical_value
+        description: "historical value of the metric being checked"
+        data_type: number(38,2)
+
+      - name: historical_avg
+        description: "average historical value of the metric being checked"
+        data_type: number(38,2)
+
+      - name: historical_stddev
+        description: "standard deviation of historical values of the metric being checked"
+        data_type: number(38,2) 
+
+      - name: z_score
+        description: "z-score of the current value compared to historical values"
+        data_type: number(38,2)
+
+      - name: pct_change
+        description: "percentage change of the current value compared to the historical average"
+        data_type: number(38,2)
+
+      - name: fail_above_threshold
+        description: "indicates if the current value exceeds the threshold"
+        data_type: number(38,0)
+
+      - name: fail_below_threshold
+        description: "indicates if the current value is below the threshold"
+        data_type: number(38,0)
+
+      - name: warn_above_threshold
+        description: "indicates if the current value is above the warning threshold"
+        data_type: number(38,0)
+
+      - name: warn_below_threshold
+        description: "indicates if the current value is below the warning threshold"
+        data_type: number(38,0)
+
+      - name: qc_status
+        description: "status of the quality control check"
+        data_type: varchar
+
+      - name: processed_at
+        description: "timestamp when the record was processed"
+        data_type: timestamp
+        tests:
+          - not_null
+
+      - name: check_id
+        description: "unique identifier for the check"
+        data_type: varchar
+        tests:
+          - not_null
+          - unique
+
